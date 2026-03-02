@@ -15,7 +15,14 @@ export async function GET(request: Request) {
 
         // 2. まだ翻訳・生成されていない新しい記事だけをフィルタリング
         // ※ APIコストを抑えるため、1回の実行につき最大1記事だけ生成する
-        const targetArticle = articles.find(article => !isArticleExists(article.link));
+        let targetArticle = null;
+        for (const article of articles) {
+            const exists = await isArticleExists(article.link);
+            if (!exists) {
+                targetArticle = article;
+                break;
+            }
+        }
 
         if (!targetArticle) {
             return NextResponse.json({ message: 'No new articles to process' }, { status: 200 });
@@ -46,7 +53,7 @@ export async function GET(request: Request) {
                 ? [generated.summary]
                 : [];
 
-        const newSavedRecord = saveArticle({
+        const newSavedRecord = await saveArticle({
             title: generated.title,
             summary: summaryArray,
             body: bodyWithAffiliate,

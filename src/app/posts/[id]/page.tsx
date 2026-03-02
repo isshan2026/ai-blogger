@@ -8,7 +8,7 @@ type Props = {
 
 export default async function PostPage(props: Props) {
     const params = await props.params;
-    const article = getArticleById(params.id);
+    const article = await getArticleById(params.id);
 
     if (!article) {
         notFound();
