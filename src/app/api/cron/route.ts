@@ -62,7 +62,7 @@ export async function GET(request: Request) {
             pubDate: targetArticle.pubDate,
         });
 
-        // 6. 成功したら、Make (旧Integromat) のWebhookにデータを送信する
+        // 6. 成功したら、IFTTT (Webhook) を使ってXアプリに新着記事を自動投稿する
         const siteUrl = `https://${request.headers.get('host') ?? 'auto-blogger-isshan.vercel.app'}`;
         const postUrl = `${siteUrl}/posts/${newSavedRecord.id}`;
 
@@ -70,23 +70,27 @@ export async function GET(request: Request) {
         let webhookError = '';
         try {
             const shortSummary = summaryArray.length > 0 ? summaryArray[0] : '';
+            const iftttKey = process.env.IFTTT_WEBHOOK_KEY || 'njPomsElLdr9AuGOiycoY'; // 直書きバックアップ込み
+            const eventName = 'my_blog';
 
-            // MakeのWebhookへ新着情報（タイトル、要約、URL）をPOST送信
-            const makeWebhookUrl = 'https://hook.us2.make.com/4uwvvg7m1xnh5w7nsd2hvk79tpr747nu';
-            const webhookResponse = await fetch(makeWebhookUrl, {
+            // IFTTTのWebhook URL
+            const iftttUrl = `https://maker.ifttt.com/trigger/${eventName}/with/key/${iftttKey}`;
+
+            // IFTTT側に設定した Value1, Value2, Value3 に合わせてデータを送信
+            const webhookResponse = await fetch(iftttUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    title: generated.title,
-                    summary: shortSummary,
-                    url: postUrl
+                    value1: generated.title,
+                    value2: shortSummary,
+                    value3: postUrl
                 })
             });
 
             if (!webhookResponse.ok) {
-                throw new Error(`Webhook responded with status: ${webhookResponse.status}`);
+                throw new Error(`IFTTT webhook responded with status: ${webhookResponse.status}`);
             }
-            console.log('Successfully sent data to Make Webhook');
+            console.log('Successfully sent data to IFTTT Webhook');
         } catch (err: any) {
             console.error('Webhook sending failed but article was saved:', err);
             webhookStatus = 'Failed';
