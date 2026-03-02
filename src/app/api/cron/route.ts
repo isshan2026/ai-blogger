@@ -68,16 +68,22 @@ export async function GET(request: Request) {
         const siteUrl = `https://${request.headers.get('host') ?? 'auto-blogger-isshan.vercel.app'}`;
         const postUrl = `${siteUrl}/posts/${newSavedRecord.id}`;
 
+        let xPostStatus = 'Success';
+        let xPostError = '';
         try {
             // 要約の1つ目の文章だけを短く抽出してツイートに載せる
             const shortSummary = summaryArray.length > 0 ? summaryArray[0] : '';
             await postToX(generated.title, shortSummary, postUrl);
-        } catch (xError) {
+        } catch (xError: any) {
             console.error('X (Twitter) posting failed but article was saved:', xError);
+            xPostStatus = 'Failed';
+            xPostError = xError.message || JSON.stringify(xError);
         }
 
         return NextResponse.json({
             message: 'Successfully generated, saved new article, and attempted X post',
+            xPostStatus,
+            xPostError,
             article: newSavedRecord
         }, { status: 200 });
 
