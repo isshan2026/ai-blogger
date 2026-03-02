@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-background: #050505;
+  --color-foreground: #f0f0f0;
+
+  /* Custom Color Tokens */
+  --color-accent-cyan: #00f0ff;
+  --color-accent-purple: #8a2be2;
+  --color-accent-blue: #0066ff;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom background animation */
+.bg-gradient-animate {
+  background: radial-gradient(circle at 15% 50%, rgba(138, 43, 226, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.1), transparent 25%);
+  background-size: 100% 100%;
+  animation: glow 15s ease infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background-color: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, #fff, #a1a1aa);
+}
+
+.text-gradient-accent {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+}
+
+/* Prose tweaks for dark mode */
+.prose {
+  --tw-prose-body: #a1a1aa;
+  --tw-prose-headings: #ffffff;
+  --tw-prose-links: #00f0ff;
+  --tw-prose-bold: #f4f4f5;
+  --tw-prose-counters: #a1a1aa;
+  --tw-prose-bullets: #52525b;
+  --tw-prose-hr: #27272a;
+  --tw-prose-quotes: #e4e4e7;
+  --tw-prose-quote-borders: #8a2be2;
+  --tw-prose-captions: #a1a1aa;
+  --tw-prose-code: #ffffff;
+  --tw-prose-pre-code: #e4e4e7;
+  --tw-prose-pre-bg: rgba(0, 0, 0, 0.5);
+  --tw-prose-th-borders: #3f3f46;
+  --tw-prose-td-borders: #27272a;
+}
