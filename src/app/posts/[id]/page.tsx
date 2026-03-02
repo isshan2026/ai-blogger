@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { getArticleById } from '@/lib/db';
 import ArticleDetail from '@/components/ArticleDetail';
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
     params: Promise<{ id: string }>;
 };
