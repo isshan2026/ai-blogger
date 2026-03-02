@@ -8,6 +8,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "AI & Tech Insights | Premium Edition",
   description: "海外の最新AIトレンドや技術ニュースを洗練されたAIが自動で翻訳・要約してお届けします。",
+  other: {
+    "google-adsense-account": "ca-pub-3341337926078969"
+  }
 };
 
 export default function RootLayout({
