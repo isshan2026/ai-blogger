@@ -63,7 +63,7 @@ export async function GET(request: Request) {
         });
 
         // 6. 成功したら、IFTTT (Webhook) を使ってXアプリに新着記事を自動投稿する
-        const siteUrl = `https://${request.headers.get('host') ?? 'auto-blogger-isshan.vercel.app'}`;
+        const siteUrl = `https://${request.headers.get('host') ?? 'discover-the-future.vercel.app'}`;
         const postUrl = `${siteUrl}/posts/${newSavedRecord.id}`;
 
         let webhookStatus = 'Success';
