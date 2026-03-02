@@ -20,11 +20,11 @@ export default function RootLayout({
       <head>
         {/*
           Google AdSense 自動広告のスクリプト
-          ※ 審査通過後、'ca-pub-XXXXXXXXXXXXXXXX' の部分をご自身のアカウントID（サイト運営者ID）に書き換えてください。
+          ※ 審査通過後、'ca-pub-3341337926078969' の部分をご自身のアカウントID（サイト運営者ID）に書き換えてください。
         */}
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3341337926078969"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
