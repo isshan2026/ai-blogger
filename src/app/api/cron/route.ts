@@ -3,6 +3,7 @@ import { fetchLatestArticles } from '@/lib/fetcher';
 import { generateBlogArticle } from '@/lib/ai';
 import { isArticleExists, saveArticle } from '@/lib/db';
 import { insertAffiliateTags } from '@/lib/affiliate';
+import { postToX } from '@/lib/twitter'; // 新規追加
 
 // Vercel Cron等から定期的に叩かれるルート
 export async function GET(request: Request) {
@@ -62,8 +63,21 @@ export async function GET(request: Request) {
             pubDate: targetArticle.pubDate,
         });
 
+        // 6. 成功したら、X（Twitter）に自動でURLとタイトルを投稿する
+        // 本番環境のURL（例: auto-blogger-isshan.vercel.app）を使用
+        const siteUrl = `https://${request.headers.get('host') ?? 'auto-blogger-isshan.vercel.app'}`;
+        const postUrl = `${siteUrl}/posts/${newSavedRecord.id}`;
+
+        try {
+            // 要約の1つ目の文章だけを短く抽出してツイートに載せる
+            const shortSummary = summaryArray.length > 0 ? summaryArray[0] : '';
+            await postToX(generated.title, shortSummary, postUrl);
+        } catch (xError) {
+            console.error('X (Twitter) posting failed but article was saved:', xError);
+        }
+
         return NextResponse.json({
-            message: 'Successfully generated and saved new article',
+            message: 'Successfully generated, saved new article, and attempted X post',
             article: newSavedRecord
         }, { status: 200 });
 
