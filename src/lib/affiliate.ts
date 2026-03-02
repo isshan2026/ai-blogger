@@ -5,8 +5,8 @@
 // サンプルのアフィリエイトHTMLタグ（ユーザーが後で自分のものに差し替える）
 const AFFILIATE_TAG = `
 <div style="padding: 24px; border: 1px solid rgba(0, 240, 255, 0.2); background-color: rgba(20, 20, 20, 0.6); text-align: center; margin: 40px 0; border-radius: 16px; backdrop-filter: blur(16px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);">
-  <p style="margin-bottom: 16px; font-weight: bold; color: #f0f0f0; letter-spacing: 0.05em;">💡 AIや最新テクノロジーを学ぶならこれ！</p>
-  <a href="https://amazon.co.jp/" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(138, 43, 226, 0.1)); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 8px; color: #00f0ff; text-decoration: none; font-weight: bold; font-size: 0.9em;">
+  <p style="margin-bottom: 16px; font-weight: bold; color: #f0f0f0; letter-spacing: 0.05em;">💡 AIや最新テクノロジーを深く学ぶならこれ！</p>
+  <a href="https://www.amazon.co.jp/s?k=AI+%E3%83%86%E3%82%AF%E3%83%8E%E3%83%AD%E3%82%B8%E3%83%BC+%E6%9B%B8%E7%B1%8D&tag=autobloggeris-22" target="_blank" rel="noopener noreferrer" style="display: items-center; justify-content: center; padding: 12px 24px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(138, 43, 226, 0.1)); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 8px; color: #00f0ff; text-decoration: none; font-weight: bold; font-size: 0.9em; transition: all 0.3s ease;">
     おすすめの関連書籍・ツールをチェックする（Amazon）
   </a>
 </div>
