@@ -3,7 +3,6 @@ import { fetchLatestArticles } from '@/lib/fetcher';
 import { generateBlogArticle } from '@/lib/ai';
 import { isArticleExists, saveArticle } from '@/lib/db';
 import { insertAffiliateTags } from '@/lib/affiliate';
-import { postToX } from '@/lib/twitter'; // 新規追加
 
 // Vercel Cron等から定期的に叩かれるルート
 export async function GET(request: Request) {
@@ -63,27 +62,41 @@ export async function GET(request: Request) {
             pubDate: targetArticle.pubDate,
         });
 
-        // 6. 成功したら、X（Twitter）に自動でURLとタイトルを投稿する
-        // 本番環境のURL（例: auto-blogger-isshan.vercel.app）を使用
+        // 6. 成功したら、Make (旧Integromat) のWebhookにデータを送信する
         const siteUrl = `https://${request.headers.get('host') ?? 'auto-blogger-isshan.vercel.app'}`;
         const postUrl = `${siteUrl}/posts/${newSavedRecord.id}`;
 
-        let xPostStatus = 'Success';
-        let xPostError = '';
+        let webhookStatus = 'Success';
+        let webhookError = '';
         try {
-            // 要約の1つ目の文章だけを短く抽出してツイートに載せる
             const shortSummary = summaryArray.length > 0 ? summaryArray[0] : '';
-            await postToX(generated.title, shortSummary, postUrl);
-        } catch (xError: any) {
-            console.error('X (Twitter) posting failed but article was saved:', xError);
-            xPostStatus = 'Failed';
-            xPostError = xError.message || JSON.stringify(xError);
+
+            // MakeのWebhookへ新着情報（タイトル、要約、URL）をPOST送信
+            const makeWebhookUrl = 'https://hook.us2.make.com/4uwvvg7m1xnh5w7nsd2hvk79tpr747nu';
+            const webhookResponse = await fetch(makeWebhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: generated.title,
+                    summary: shortSummary,
+                    url: postUrl
+                })
+            });
+
+            if (!webhookResponse.ok) {
+                throw new Error(`Webhook responded with status: ${webhookResponse.status}`);
+            }
+            console.log('Successfully sent data to Make Webhook');
+        } catch (err: any) {
+            console.error('Webhook sending failed but article was saved:', err);
+            webhookStatus = 'Failed';
+            webhookError = err.message || JSON.stringify(err);
         }
 
         return NextResponse.json({
-            message: 'Successfully generated, saved new article, and attempted X post',
-            xPostStatus,
-            xPostError,
+            message: 'Successfully generated, saved new article, and triggered webhook',
+            webhookStatus,
+            webhookError,
             article: newSavedRecord
         }, { status: 200 });
 
