@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" className="dark">
+    <html lang="ja" className="dark" suppressHydrationWarning>
       <head>
         {/*
           Google AdSense 自動広告のスクリプト
@@ -32,7 +32,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body className={`${inter.className} antialiased bg-[#050505] text-gray-100 min-h-screen flex flex-col`}>
+      <body suppressHydrationWarning className={`${inter.className} antialiased bg-[#050505] text-gray-100 min-h-screen flex flex-col`}>
         {children}
       </body>
     </html>
