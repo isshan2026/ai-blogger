@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,6 +35,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className={`${inter.className} antialiased bg-[#050505] text-gray-100 min-h-screen flex flex-col`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
