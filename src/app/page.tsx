@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home({ searchParams }: { searchParams: { page?: string } }) {
   const page = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const limit = 10;
+  const limit = 5; // より軽く、見やすくするため1ページ5件に設定
   
   const [articles, totalCount] = await Promise.all([
       getArticles(page, limit),
