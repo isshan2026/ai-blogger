@@ -15,7 +15,15 @@ type ArticleRecord = {
     createdAt: string;
 };
 
-export default function ArticleList({ articles }: { articles: ArticleRecord[] }) {
+export default function ArticleList({ 
+    articles, 
+    currentPage = 1, 
+    totalPages = 1 
+}: { 
+    articles: ArticleRecord[];
+    currentPage?: number;
+    totalPages?: number;
+}) {
     // コンテナアニメーションの設定
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
@@ -148,6 +156,41 @@ export default function ArticleList({ articles }: { articles: ArticleRecord[] })
                                 </div>
                             </motion.article>
                         ))}
+
+                        {/* Pagination Section */}
+                        {totalPages > 1 && (
+                            <motion.div variants={itemVariants} className="flex justify-center items-center gap-4 mt-12">
+                                {currentPage > 1 ? (
+                                    <Link 
+                                        href={`/?page=${currentPage - 1}`}
+                                        className="px-6 py-3 rounded-full glass-panel border border-[rgba(0,240,255,0.2)] text-cyan-400 hover:bg-cyan-500/10 transition-colors"
+                                    >
+                                        &larr; Previous
+                                    </Link>
+                                ) : (
+                                    <span className="px-6 py-3 rounded-full glass-panel border border-white/5 text-gray-600 cursor-not-allowed">
+                                        &larr; Previous
+                                    </span>
+                                )}
+
+                                <span className="text-gray-400 font-mono text-sm">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+
+                                {currentPage < totalPages ? (
+                                    <Link 
+                                        href={`/?page=${currentPage + 1}`}
+                                        className="px-6 py-3 rounded-full glass-panel border border-[rgba(0,240,255,0.2)] text-cyan-400 hover:bg-cyan-500/10 transition-colors"
+                                    >
+                                        Next &rarr;
+                                    </Link>
+                                ) : (
+                                    <span className="px-6 py-3 rounded-full glass-panel border border-white/5 text-gray-600 cursor-not-allowed">
+                                        Next &rarr;
+                                    </span>
+                                )}
+                            </motion.div>
+                        )}
                     </motion.div>
                 )}
             </section>

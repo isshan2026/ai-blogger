@@ -50,12 +50,16 @@ async function initDb() {
 }
 
 /**
- * 過去に保存された記事をすべて取得する
+ * 過去に保存された記事をすべて取得する (ページネーション対応)
  */
-export async function getArticles(): Promise<ArticleRecord[]> {
+export async function getArticles(page: number = 1, limit: number = 10): Promise<ArticleRecord[]> {
     await initDb();
     try {
-        const { rows } = await pool.query('SELECT * FROM articles ORDER BY "createdAt" DESC');
+        const offset = (page - 1) * limit;
+        const { rows } = await pool.query(
+            'SELECT * FROM articles ORDER BY "createdAt" DESC LIMIT $1 OFFSET $2',
+            [limit, offset]
+        );
         return rows.map(row => ({
             ...row,
             createdAt: row.createdAt.toISOString(),
@@ -64,6 +68,20 @@ export async function getArticles(): Promise<ArticleRecord[]> {
     } catch (err) {
         console.error('Error reading DB:', err);
         return [];
+    }
+}
+
+/**
+ * 全記事の総数を取得する
+ */
+export async function getTotalArticlesCount(): Promise<number> {
+    await initDb();
+    try {
+        const { rows } = await pool.query('SELECT COUNT(*) FROM articles');
+        return parseInt(rows[0].count, 10);
+    } catch (err) {
+        console.error('Error fetching total count:', err);
+        return 0;
     }
 }
 
